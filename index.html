@@ -1,0 +1,63 @@
+<html>
+
+<body>
+
+   
+    <table width="440" border="0">
+      <tr>
+        <td valign="top">
+          <textarea rows="25" cols="62" readonly="" id="result"></textarea><br>
+		  <input type="text" id="entrybox" size="60"/>
+		  <p>Type <i>vlist</i> to see the words available. Use <i>dump</i> to see the stack, and <i>1 trace</i> to enable a stack dump at each interpreted instruction.</p>
+        </td>
+		<td rowspan="2" valign="top">
+			<img src="logo.png"><br>
+			<p>This is a (very) simple implementation of Forth, using under 230 lines of Javascript. Including comments.</p>
+			<p>I make no apologies for its speed, completeness, or ability to perform real-worlds tasks. It was written
+			purely as a proof of concept, on an idle Sunday morning. (And the odd evening.)</p>
+			<p>If you visit <a href="//github.com/MarquisdeGeek/jedi">Github for Jedi Forth</a> you can grab the source. The README illustrates its many shortcomings.</p>
+			<p>It was released on May the 4th 2015, so I'm not apologizing for the bad pun, nor changing the name. (Until Disney sues me!)</p>
+		</td>
+      </tr>
+    </table>
+
+
+	<script type="text/javascript" src="forth_state.js"></script>
+	<script type="text/javascript" src="forth_library.js"></script>
+	<script type="text/javascript" src="io_system.js"></script>
+
+	<script type="text/javascript" >
+
+	var inputBox = document.getElementById("entrybox");
+	inputBox.onkeypress = function(args) {
+		if(args.keyCode === 13) {
+			var input = document.getElementById('entrybox').value;
+			var output = fs.evaluate(input);
+			
+			if (output["success"]) {
+				document.getElementById('result').value += output["output"];
+			} else {
+				document.getElementById('result').value += output["error"];
+			}
+
+			var result = document.getElementById('result');
+			result.value += " ok.\n";
+			result.scrollTop = result.scrollHeight;
+
+			document.getElementById('entrybox').value = "";
+		}
+	};
+
+	//
+	// Initialize Forth stuff
+	//
+	var io = new IOSystem();
+	var fs = new ForthState();
+	new ForthLibrary(fs);
+
+	</script>
+
+
+</body>
+</html>
+
